@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "PanoplyCanopy",
+			"Path": "..\\Source\\PanoplyCanopy.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "PanoplyCanopyEditor",
+			"Path": "..\\Source\\PanoplyCanopyEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
