@@ -13,9 +13,6 @@
 			]
 		}
 	],
-	"AdditionalShaderDirectories": [
-		"Shaders"
-	],
 	"Plugins": [
 		{
 			"Name": "ModelingToolsEditorMode",
@@ -23,6 +20,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "WaveFunctionCollapse",
+			"Enabled": true
 		}
 	]
 }
