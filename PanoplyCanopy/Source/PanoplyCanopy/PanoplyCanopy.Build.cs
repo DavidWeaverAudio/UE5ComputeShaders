@@ -1,23 +1,29 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 using UnrealBuildTool;
 
 public class PanoplyCanopy : ModuleRules
 {
-	public PanoplyCanopy(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+    public PanoplyCanopy(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+        PublicDependencyModuleNames.AddRange(new string[] {
+            "Core",
+            "CoreUObject",
+            "Engine",
+            "InputCore",
+            "RHI",                // Add this module for RHI commands
+            "RenderCore",         // Add this module for rendering utilities
+            "Renderer",           // Add this module for the rendering interface
+            "Projects",
+            "ComputeFramework",   // Add this module for compute shader utilities
+        });
 
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
+        PrivateDependencyModuleNames.AddRange(new string[] { });
 
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
+        // Ensure shader directory is added to the include path
+        PublicIncludePaths.AddRange(new string[] {
+            "PanoplyCanopy",
+            "PanoplyCanopy/Content/Shaders"
+        });
+    }
 }

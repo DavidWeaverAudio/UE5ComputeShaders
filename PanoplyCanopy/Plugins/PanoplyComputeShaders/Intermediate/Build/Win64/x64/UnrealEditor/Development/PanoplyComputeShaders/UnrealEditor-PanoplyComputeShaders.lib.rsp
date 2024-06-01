@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-PanoplyComputeShaders.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Intermediate\Build\Win64\x64\PanoplyCanopyEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Intermediate\Build\Win64\x64\UnrealEditor\Development\PanoplyComputeShaders\Module.PanoplyComputeShaders.cpp.obj"
+"C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Intermediate\Build\Win64\x64\UnrealEditor\Development\PanoplyComputeShaders\Default.rc2.res"
+/OUT:"C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Intermediate\Build\Win64\x64\UnrealEditor\Development\PanoplyComputeShaders\UnrealEditor-PanoplyComputeShaders.lib"

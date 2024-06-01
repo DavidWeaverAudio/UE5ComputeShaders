@@ -7,8 +7,14 @@
 		{
 			"Name": "PanoplyCanopy",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "PostConfigInit",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		}
+	],
+	"AdditionalShaderDirectories": [
+		"Shaders"
 	],
 	"Plugins": [
 		{

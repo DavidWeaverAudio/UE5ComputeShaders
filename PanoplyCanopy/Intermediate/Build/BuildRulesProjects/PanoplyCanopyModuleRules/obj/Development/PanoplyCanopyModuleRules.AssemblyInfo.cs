@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PanoplyCanopyModuleRules")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Development")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff7e42990590d473a81bf9ca1041e0ec55d2d399")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f19ab0a845dcaa9ebc7d321aeaa9c5a265105b2")]
 [assembly: System.Reflection.AssemblyProductAttribute("PanoplyCanopyModuleRules")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PanoplyCanopyModuleRules")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
