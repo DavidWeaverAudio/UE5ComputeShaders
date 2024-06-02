@@ -1,5 +1,5 @@
 #include "MySimpleComputeShader.h"
-#include "MyShaders/Public/MySimpleComputeShader/MySimpleComputeShader.h"
+#include "MyShaders/Public/MySimpleComputeShader.h"
 #include "PixelShaderUtils.h"
 #include "MeshPassProcessor.inl"
 #include "StaticMeshResources.h"
