@@ -12,8 +12,6 @@
 
 void FMyShadersModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-
 	// Maps virtual shader source directory to the plugin's actual shaders directory.
 	FString PluginShaderDir = FPaths::Combine(IPluginManager::Get().FindPlugin(TEXT("PanoplyComputeShaders"))->GetBaseDir(), TEXT("Shaders/Private"));
 	AddShaderSourceDirectoryMapping(TEXT("/MyShadersShaders"), PluginShaderDir);
@@ -21,8 +19,6 @@ void FMyShadersModule::StartupModule()
 
 void FMyShadersModule::ShutdownModule()
 {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
 }
 
 #undef LOCTEXT_NAMESPACE
