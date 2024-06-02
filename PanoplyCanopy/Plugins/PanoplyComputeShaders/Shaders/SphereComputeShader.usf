@@ -1,9 +1,0 @@
-RWTexture2D<float4> OutputTexture;
-
-[numthreads(8, 8, 1)]
-void SphereComputeShader(uint3 DTid : SV_DispatchThreadID)
-{
-    float x = DTid.x;
-    float y = DTid.y;
-    OutputTexture[DTid.xy] = float4(x / 1024.0, y / 1024.0, 0.0, 1.0);
-}

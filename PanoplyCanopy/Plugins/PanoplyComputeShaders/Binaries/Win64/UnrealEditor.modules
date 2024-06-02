@@ -2,6 +2,7 @@
 	"BuildId": "27405482",
 	"Modules": 
 	{
+		"MyShaders": "UnrealEditor-MyShaders.dll",
 		"PanoplyComputeShaders": "UnrealEditor-PanoplyComputeShaders.dll"
 	}
 }

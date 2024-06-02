@@ -12,18 +12,9 @@ public class PanoplyComputeShaders : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
-            "RenderCore",
-            "Renderer",
-            "RHI",
             "Projects"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { });
-
-        // Add the shader directory to the include path
-        PublicIncludePaths.AddRange(new string[] {
-            "PanoplyComputeShaders",
-            "PanoplyComputeShaders/Shaders"
-        });
     }
 }

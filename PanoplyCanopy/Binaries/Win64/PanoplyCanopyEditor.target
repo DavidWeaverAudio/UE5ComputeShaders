@@ -4766,6 +4766,18 @@
 			"Type": "RequiredResource"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Experimental/WaveFunctionCollapse/Binaries/Win64/UnrealEditor-WaveFunctionCollapse.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/WaveFunctionCollapse/Binaries/Win64/UnrealEditor-WaveFunctionCollapse.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/WaveFunctionCollapse/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/FX/Niagara/Binaries/Win64/UnrealEditor-Niagara.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -5594,18 +5606,6 @@
 			"Type": "RequiredResource"
 		},
 		{
-			"Path": "$(EngineDir)/Plugins/Runtime/ComputeFramework/Binaries/Win64/UnrealEditor-ComputeFramework.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(EngineDir)/Plugins/Runtime/ComputeFramework/Binaries/Win64/UnrealEditor-ComputeFramework.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(EngineDir)/Plugins/Runtime/ComputeFramework/Binaries/Win64/UnrealEditor.modules",
-			"Type": "RequiredResource"
-		},
-		{
 			"Path": "$(EngineDir)/Plugins/Runtime/CustomMeshComponent/Binaries/Win64/UnrealEditor-CustomMeshComponent.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -6184,6 +6184,14 @@
 		{
 			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/PanoplyComputeShaders/Binaries/Win64/UnrealEditor-MyShaders.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/PanoplyComputeShaders/Binaries/Win64/UnrealEditor-MyShaders.pdb",
+			"Type": "SymbolFile"
 		},
 		{
 			"Path": "$(ProjectDir)/Plugins/PanoplyComputeShaders/Binaries/Win64/UnrealEditor-PanoplyComputeShaders.dll",
@@ -27213,6 +27221,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Experimental/ToolPresets/ToolPresets.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/WaveFunctionCollapse/WaveFunctionCollapse.uplugin",
 			"Type": "UFS"
 		},
 		{

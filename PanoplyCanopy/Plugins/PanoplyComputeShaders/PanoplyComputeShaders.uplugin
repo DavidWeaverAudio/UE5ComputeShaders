@@ -19,9 +19,11 @@
 			"Name": "PanoplyComputeShaders",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "MyShaders",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
 		}
-	],
-	"AdditionalShaderDirectories": [
-		"Shaders"
 	]
 }

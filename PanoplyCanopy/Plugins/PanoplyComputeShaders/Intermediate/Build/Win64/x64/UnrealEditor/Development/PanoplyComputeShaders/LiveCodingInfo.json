@@ -2,11 +2,7 @@
 	"RemapUnityFiles": 
 	{
 		"Module.PanoplyComputeShaders.cpp.obj": [
-			"PanoplyComputeShaders.init.gen.cpp.obj",
-			"SphereComputeActor.gen.cpp.obj",
-			"PanoplyComputeShaders.cpp.obj",
-			"SphereComputeActor.cpp.obj",
-			"SphereComputeShader.cpp.obj"
+			"PanoplyComputeShaders.cpp.obj"
 		]
 	}
 }

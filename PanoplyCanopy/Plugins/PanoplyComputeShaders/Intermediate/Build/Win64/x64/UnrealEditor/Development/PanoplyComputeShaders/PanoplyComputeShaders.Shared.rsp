@@ -1,6 +1,5 @@
 /I "."
 /I "C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Source\PanoplyComputeShaders\Private"
-/I "C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Intermediate\Build\Win64\UnrealEditor\Inc\PanoplyComputeShaders\UHT"
 /I "C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Source"
 /I "C:\Users\david\repos\PanoplyCanopy\PanoplyCanopy\Plugins\PanoplyComputeShaders\Source\PanoplyComputeShaders\Public"
 /I "Runtime\Core\Public"
