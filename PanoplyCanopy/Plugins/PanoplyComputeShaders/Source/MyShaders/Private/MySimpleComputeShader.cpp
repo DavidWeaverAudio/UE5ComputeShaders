@@ -99,7 +99,6 @@ IMPLEMENT_GLOBAL_SHADER(FMySimpleComputeShader, "/MyShadersShaders/MySimpleCompu
 
 void FMySimpleComputeShaderInterface::DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FMySimpleComputeShaderDispatchParams Params, TFunction<void(int OutputVal)> AsyncCallback) {
 	FRDGBuilder GraphBuilder(RHICmdList);
-
 	{
 		SCOPE_CYCLE_COUNTER(STAT_MySimpleComputeShader_Execute);
 		DECLARE_GPU_STAT(MySimpleComputeShader)
@@ -107,32 +106,21 @@ void FMySimpleComputeShaderInterface::DispatchRenderThread(FRHICommandListImmedi
 		RDG_GPU_STAT_SCOPE(GraphBuilder, MySimpleComputeShader);
 
 		typename FMySimpleComputeShader::FPermutationDomain PermutationVector;
-
-		// Add any static permutation options here
-		// PermutationVector.Set<FMySimpleComputeShader::FMyPermutationName>(12345);
-
 		TShaderMapRef<FMySimpleComputeShader> ComputeShader(GetGlobalShaderMap(GMaxRHIFeatureLevel), PermutationVector);
-
-
 		bool bIsShaderValid = ComputeShader.IsValid();
 
 		if (bIsShaderValid) {
 			FMySimpleComputeShader::FParameters* PassParameters = GraphBuilder.AllocParameters<FMySimpleComputeShader::FParameters>();
-
-
+			
 			const void* RawData = (void*)Params.Input;
 			int NumInputs = 2;
 			int InputSize = sizeof(int);
 			FRDGBufferRef InputBuffer = CreateUploadBuffer(GraphBuilder, TEXT("InputBuffer"), InputSize, NumInputs, RawData, InputSize * NumInputs);
-
 			PassParameters->Input = GraphBuilder.CreateSRV(FRDGBufferSRVDesc(InputBuffer, PF_R32_SINT));
-
 			FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(
 				FRDGBufferDesc::CreateBufferDesc(sizeof(int32), 1),
 				TEXT("OutputBuffer"));
-
 			PassParameters->Output = GraphBuilder.CreateUAV(FRDGBufferUAVDesc(OutputBuffer, PF_R32_SINT));
-
 
 			auto GroupCount = FComputeShaderUtils::GetGroupCount(FIntVector(Params.X, Params.Y, Params.Z), FComputeShaderUtils::kGolden2DGroupSize);
 			GraphBuilder.AddPass(
@@ -144,22 +132,17 @@ void FMySimpleComputeShaderInterface::DispatchRenderThread(FRHICommandListImmedi
 					FComputeShaderUtils::Dispatch(RHICmdList, ComputeShader, *PassParameters, GroupCount);
 				});
 
-
 			FRHIGPUBufferReadback* GPUBufferReadback = new FRHIGPUBufferReadback(TEXT("ExecuteMySimpleComputeShaderOutput"));
 			AddEnqueueCopyPass(GraphBuilder, GPUBufferReadback, OutputBuffer, 0u);
 
 			auto RunnerFunc = [GPUBufferReadback, AsyncCallback](auto&& RunnerFunc) -> void {
 				if (GPUBufferReadback->IsReady()) {
-
 					int32* Buffer = (int32*)GPUBufferReadback->Lock(1);
 					int OutVal = Buffer[0];
-
 					GPUBufferReadback->Unlock();
-
 					AsyncTask(ENamedThreads::GameThread, [AsyncCallback, OutVal]() {
 						AsyncCallback(OutVal);
 						});
-
 					delete GPUBufferReadback;
 				}
 				else {

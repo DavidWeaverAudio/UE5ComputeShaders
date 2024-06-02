@@ -62,7 +62,6 @@ public:
 		FMySimpleComputeShaderDispatchParams Params(1, 1, 1);
 		Params.Input[0] = Arg1;
 		Params.Input[1] = Arg2;
-
 		FMySimpleComputeShaderInterface::Dispatch(Params, [this](int OutputVal) {
 			this->Completed.Broadcast(OutputVal);
 		});
@@ -75,7 +74,6 @@ public:
 		Action->Arg1 = Arg2;
 		Action->Arg2 = Arg2;
 		Action->RegisterWithGameInstance(WorldContextObject);
-
 		return Action;
 	}
 
