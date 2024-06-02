@@ -12,7 +12,7 @@ struct FMySimpleComputeShaderDispatchParams
 	int Y;
 	int Z;
 
-	int Input[2];
+	FVector3f Input[2];
 	int Output;
 
 	FMySimpleComputeShaderDispatchParams(int InX, int InY, int InZ)
@@ -68,10 +68,10 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", Category = "ComputeShader", WorldContext = "WorldContextObject"))
-	static UMySimpleComputeShaderLibrary_AsyncExecution* ExecuteBaseComputeShader(UObject* WorldContextObject, int Arg1, int Arg2)
+	static UMySimpleComputeShaderLibrary_AsyncExecution* ExecuteBaseComputeShader(UObject* WorldContextObject, FVector3f Arg1, FVector3f Arg2)
 	{
 		UMySimpleComputeShaderLibrary_AsyncExecution* Action = NewObject<UMySimpleComputeShaderLibrary_AsyncExecution>();
-		Action->Arg1 = Arg2;
+		Action->Arg1 = Arg1;
 		Action->Arg2 = Arg2;
 		Action->RegisterWithGameInstance(WorldContextObject);
 		return Action;
@@ -80,6 +80,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnMySimpleComputeShaderLibrary_AsyncExecutionCompleted Completed;
 
-	int Arg1;
-	int Arg2;
+	FVector3f Arg1;
+	FVector3f Arg2;
 };
