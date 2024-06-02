@@ -12,8 +12,10 @@ struct FMyStructComputeShaderDispatchParams
 	int Y;
 	int Z;
 
-	FVector3f Input[2];
+	TArray<FVector3f> Input;
 	int Output;
+	int InputNum;  
+	FVector3f InputTarget;
 
 	FMyStructComputeShaderDispatchParams(int InX, int InY, int InZ)
 		: X(InX), Y(InY), Z(InZ)
@@ -60,19 +62,21 @@ class UMyStructComputeShaderLibrary_AsyncExecution : public UBlueprintAsyncActio
 public:
 	virtual void Activate() override {
 		FMyStructComputeShaderDispatchParams Params(1, 1, 1);
-		Params.Input[0] = Arg1;
-		Params.Input[1] = Arg2;
+		Params.Input = Args;
+		Params.InputNum = Args.Num();
+		Params.InputTarget = InputTarget;
+
 		FMyStructComputeShaderInterface::Dispatch(Params, [this](int OutputVal) {
 			this->Completed.Broadcast(OutputVal);
 			});
 	}
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", Category = "ComputeShader", WorldContext = "WorldContextObject"))
-	static UMyStructComputeShaderLibrary_AsyncExecution* ExecuteBaseComputeShader(UObject* WorldContextObject, FVector3f Arg1, FVector3f Arg2)
+	static UMyStructComputeShaderLibrary_AsyncExecution* ExecuteBaseComputeShader(UObject* WorldContextObject, TArray<FVector3f> Args, FVector3f InputTarget)
 	{
 		UMyStructComputeShaderLibrary_AsyncExecution* Action = NewObject<UMyStructComputeShaderLibrary_AsyncExecution>();
-		Action->Arg1 = Arg1;
-		Action->Arg2 = Arg2;
+		Action->Args = Args;
+		Action->InputTarget = InputTarget;
 		Action->RegisterWithGameInstance(WorldContextObject);
 		return Action;
 	}
@@ -80,6 +84,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnMyStructComputeShaderLibrary_AsyncExecutionCompleted Completed;
 
-	FVector3f Arg1;
-	FVector3f Arg2;
+	TArray<FVector3f> Args;
+	FVector3f InputTarget;
 };

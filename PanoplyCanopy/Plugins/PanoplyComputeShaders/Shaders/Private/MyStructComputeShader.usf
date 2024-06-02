@@ -2,9 +2,29 @@
 
 Buffer<float3> Input;
 RWBuffer<int> Output;
+int InputNum;
+float3 InputTarget;
 
 [numthreads(THREADS_X, THREADS_Y, THREADS_Z)]
 void MyStructComputeShader(uint3 DispatchThreadId : SV_DispatchThreadID, uint GroupIndex : SV_GroupIndex)
 {
-    Output[0] = distance(Input[0], Input[1]);
+    //Go through all the elements of the input buffer and calculate the distance between them and input target
+    //Store the index of the closest element in the output buffer
+    
+    float minDistance = 1000000.0f;
+    int minIndex = 0;
+    int InputNum = 0;
+    int TotalInputs = InputNum;
+    
+    for (int i = 0; i < TotalInputs; i++)
+    {
+        float3 diff = Input[i] - InputTarget;
+        float distance = dot(diff, diff);
+        if (distance < minDistance)
+        {
+            minDistance = distance;
+            minIndex = i;
+        }
+    }
+    Output[0] = minIndex;
 }

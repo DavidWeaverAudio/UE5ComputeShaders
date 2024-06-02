@@ -29,7 +29,9 @@ public:
 #pragma endregion
 	BEGIN_SHADER_PARAMETER_STRUCT(FParameters, )
 		SHADER_PARAMETER_RDG_BUFFER_SRV(Buffer<FVector3f>, Input)
+		SHADER_PARAMETER_RDG_BUFFER_SRV(Buffer <FVector3f>, InputTarget)
 		SHADER_PARAMETER_RDG_BUFFER_UAV(RWBuffer<float>, Output)
+		SHADER_PARAMETER(int, NumInputs)
 		END_SHADER_PARAMETER_STRUCT()
 
 public:
@@ -70,11 +72,15 @@ void FMyStructComputeShaderInterface::DispatchRenderThread(FRHICommandListImmedi
 		if (bIsShaderValid) {
 			FMyStructComputeShader::FParameters* PassParameters = GraphBuilder.AllocParameters<FMyStructComputeShader::FParameters>();
 
-			const void* RawData = (void*)Params.Input;
-			int NumInputs = 2;
+			const void* RawData = (void*)Params.Input.GetData();
+			int NumInputs = Params.Input.Num();
+			FVector3f InputTarget = Params.InputTarget;
 			int InputSize = sizeof(FVector3f);
 			FRDGBufferRef InputBuffer = CreateUploadBuffer(GraphBuilder, TEXT("InputBuffer"), InputSize, NumInputs, RawData, InputSize * NumInputs);
+			FRDGBufferRef InputTargetBuffer = CreateUploadBuffer(GraphBuilder, TEXT("InputTargetBuffer"), sizeof(FVector3f), 1, &InputTarget, sizeof(FVector3f));
 			PassParameters->Input = GraphBuilder.CreateSRV(FRDGBufferSRVDesc(InputBuffer, PF_R32G32B32F));
+			PassParameters->NumInputs = NumInputs;
+			PassParameters->InputTarget = GraphBuilder.CreateSRV(FRDGBufferSRVDesc(InputTargetBuffer, PF_R32G32B32F));
 
 			FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(
 				FRDGBufferDesc::CreateBufferDesc(sizeof(int32), 1),
