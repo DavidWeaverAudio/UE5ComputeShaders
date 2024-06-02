@@ -1,0 +1,121 @@
+# Ignore binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore build files
+Binaries/
+Build/
+
+# Ignore intermediate files
+Intermediate/
+
+# Ignore saved files
+Saved/
+DerivedDataCache/
+
+# Ignore project user-specific files
+*.user
+*.userprefs
+*.userconfig
+
+# Ignore macOS files
+.DS_Store
+
+# Ignore Windows Thumbnail Cache files
+Thumbs.db
+
+# Ignore Unreal Plugins build files
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+Plugins/*/Saved/
+Plugins/*/DerivedDataCache/
+
+# Ignore Visual Studio files
+.vscode/
+.vs/
+*.VC.db
+*.VC.VC.opendb
+*.VC.VC.db-wal
+*.VC.VC.db-shm
+
+# Ignore Rider files
+.idea/
+*.sln.iml
+.idea_modules/
+.idea_module/
+.idea_system/
+.idea_compilation/
+.idea_run/
+.idea_templates/
+.idea_workspace/
+.idea_ide_plugins/
+.idea_metadata/
+.idea_providers/
+.idea_usage/
+.idea_config/
+.idea_misc/
+.idea_frame/
+.idea_settings/
+.idea_plugins/
+.idea_code_styles/
+.idea_scope/
+.idea_project/
+.idea_library/
+.idea_roots/
+.idea_dictionaries/
+.idea_vcs/
+.idea_tasks/
+.idea_workspace_settings/
+.idea_console/
+.idea_dvm/
+.idea_fluentsetter/
+.idea_goal/
+.idea_gradle/
+.idea_kotlin/
+.idea_libraries/
+.idea_modules/
+.idea_projects/
+.idea_scope/
+.idea_vcs/
+.idea_workspace/
+.idea_exclude/
+.idea_exclusions/
+.idea_dependencies/
+.idea_runConfigurations/
+.idea_resources/
+.idea_version/
+
+# Ignore other IDE-specific files
+*.suo
+*.opensdf
+*.sdf
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.userosscache
+*.userosscache.noindex
+*.pidb
+*.sconsign.dblite
+*.sconsign.dblite.noindex
+*.orig
+*.log
+*.orig.noindex
+
+# Ignore Python specific files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignore backup files
+*.bak
+*.bak2
+*.old
+*.orig
+*.tmp
+
+# Ignore system-specific files
+Desktop.ini

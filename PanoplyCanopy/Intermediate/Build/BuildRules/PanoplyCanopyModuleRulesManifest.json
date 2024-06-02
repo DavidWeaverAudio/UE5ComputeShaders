@@ -1,9 +1,0 @@
-{
-	"SourceFiles": [
-		"C:\\Users\\david\\repos\\PanoplyCanopy\\PanoplyCanopy\\Source\\PanoplyCanopy\\PanoplyCanopy.Build.cs",
-		"C:\\Users\\david\\repos\\PanoplyCanopy\\PanoplyCanopy\\Plugins\\PanoplyComputeShaders\\Source\\PanoplyComputeShaders\\PanoplyComputeShaders.Build.cs",
-		"C:\\Users\\david\\repos\\PanoplyCanopy\\PanoplyCanopy\\Source\\PanoplyCanopy.Target.cs",
-		"C:\\Users\\david\\repos\\PanoplyCanopy\\PanoplyCanopy\\Source\\PanoplyCanopyEditor.Target.cs"
-	],
-	"EngineVersion": "5.3.2"
-}
