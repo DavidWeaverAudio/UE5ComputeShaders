@@ -1,0 +1,22 @@
+#include "/Engine/Public/Platform.ush"
+
+float3 Input;
+float3 SurfaceNormal;
+int TotalOutputs;
+RWStructuredBuffer<float3> Output[16];
+
+[numthreads(THREADS_X, THREADS_Y, THREADS_Z)]
+void VariableOutputComputeShader(uint3 DispatchThreadId : SV_DispatchThreadID, uint GroupIndex : SV_GroupIndex)
+{
+    uint index = DispatchThreadId.x + DispatchThreadId.y * 8;
+
+    if (GroupIndex < TotalOutputs)
+    {
+        float3 inputVector = Input;
+        float3 normal = SurfaceNormal;
+
+        // Calculate reflection vector
+        float3 reflection = inputVector - 2 * dot(inputVector, normal) * normal;
+        //Output[GroupIndex][index] = reflection;
+    }
+}
