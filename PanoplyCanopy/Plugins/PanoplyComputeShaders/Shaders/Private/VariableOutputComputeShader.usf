@@ -7,7 +7,7 @@ RWStructuredBuffer<float3> Output : register(u0);
 
 float3 CalculateReflection(float3 inputVector, float3 normal)
 {
-    return inputVector - (2.0f * dot(inputVector, normal)) / pow(length(normal), 2) * normal;
+    return inputVector - (2.0f * dot(inputVector, normal) / pow(length(normal), 2)) * normal;
 }
 
 [numthreads(THREADS_X, THREADS_Y, THREADS_Z)]
