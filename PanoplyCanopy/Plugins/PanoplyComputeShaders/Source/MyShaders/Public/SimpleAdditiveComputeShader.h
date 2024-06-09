@@ -4,9 +4,9 @@
 #include "GenericPlatform/GenericPlatformMisc.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 
-#include "MySimpleComputeShader.generated.h"
+#include "SimpleAdditiveComputeShader.generated.h"
 
-struct FMySimpleComputeShaderDispatchParams
+struct FSimpleAdditiveComputeShaderDispatchParams
 {
 	int X;
 	int Y;
@@ -15,18 +15,18 @@ struct FMySimpleComputeShaderDispatchParams
 	FVector3f Input[2];
 	int Output;
 
-	FMySimpleComputeShaderDispatchParams(int InX, int InY, int InZ)
+	FSimpleAdditiveComputeShaderDispatchParams(int InX, int InY, int InZ)
 		: X(InX), Y(InY), Z(InZ)
 	{
 	}
 };
 
-class FMySimpleComputeShaderInterface {
+class FSimpleAdditiveComputeShaderInterface {
 public:
-	static void DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FMySimpleComputeShaderDispatchParams Params, TFunction<void(int OutputVal)> AsyncCallback);
+	static void DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FSimpleAdditiveComputeShaderDispatchParams Params, TFunction<void(int OutputVal)> AsyncCallback);
 
 	static void DispatchGameThread(
-		FMySimpleComputeShaderDispatchParams Params, 
+		FSimpleAdditiveComputeShaderDispatchParams Params,
 		TFunction<void(int OutputVal)> AsyncCallback
 	)
 	{
@@ -37,7 +37,7 @@ public:
 			});
 	}
 	static void Dispatch(
-		FMySimpleComputeShaderDispatchParams Params,
+		FSimpleAdditiveComputeShaderDispatchParams Params,
 		TFunction<void(int OutputVal)> AsyncCallback
 	)
 	{
@@ -50,27 +50,27 @@ public:
 	}
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMySimpleComputeShaderLibrary_AsyncExecutionCompleted, const int, Value);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSimpleAdditive_AsyncExecutionCompleted, const int, Value);
 
 UCLASS()
-class UMySimpleComputeShaderLibrary_AsyncExecution : public UBlueprintAsyncActionBase
+class USimpleAdditiveComputeShaderLibrary_AsyncExecution : public UBlueprintAsyncActionBase
 {
 	GENERATED_BODY()
 
 public:
 	virtual void Activate() override {
-		FMySimpleComputeShaderDispatchParams Params(1, 1, 1);
+		FSimpleAdditiveComputeShaderDispatchParams Params(1, 1, 1);
 		Params.Input[0] = Arg1;
 		Params.Input[1] = Arg2;
-		FMySimpleComputeShaderInterface::Dispatch(Params, [this](int OutputVal) {
+		FSimpleAdditiveComputeShaderInterface::Dispatch(Params, [this](int OutputVal) {
 			this->Completed.Broadcast(OutputVal);
 		});
 	}
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", Category = "ComputeShader", WorldContext = "WorldContextObject"))
-	static UMySimpleComputeShaderLibrary_AsyncExecution* ExecuteBaseComputeShader(UObject* WorldContextObject, FVector3f Arg1, FVector3f Arg2)
+	static USimpleAdditiveComputeShaderLibrary_AsyncExecution* ExecuteBaseComputeShader(UObject* WorldContextObject, FVector3f Arg1, FVector3f Arg2)
 	{
-		UMySimpleComputeShaderLibrary_AsyncExecution* Action = NewObject<UMySimpleComputeShaderLibrary_AsyncExecution>();
+		USimpleAdditiveComputeShaderLibrary_AsyncExecution* Action = NewObject<USimpleAdditiveComputeShaderLibrary_AsyncExecution>();
 		Action->Arg1 = Arg1;
 		Action->Arg2 = Arg2;
 		Action->RegisterWithGameInstance(WorldContextObject);
@@ -78,7 +78,7 @@ public:
 	}
 
 	UPROPERTY(BlueprintAssignable)
-	FOnMySimpleComputeShaderLibrary_AsyncExecutionCompleted Completed;
+	FOnSimpleAdditive_AsyncExecutionCompleted Completed;
 
 	FVector3f Arg1;
 	FVector3f Arg2;
