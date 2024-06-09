@@ -15,7 +15,6 @@ struct FVariableOutputComputeShaderDispatchParams
 	FVector3f Input;
 	FVector3f SurfaceNormal;
 	int TotalOutputs;
-	TArray<FVector3f> Output;
 
 	FVariableOutputComputeShaderDispatchParams(int InX, int InY, int InZ)
 		: X(InX), Y(InY), Z(InZ)
@@ -65,7 +64,6 @@ public:
 		Params.Input = Input;
 		Params.SurfaceNormal = SurfaceNormal;
 		Params.TotalOutputs = TotalOutputs;
-		Params.Output.SetNumZeroed(TotalOutputs);
 		FVariableOutputComputeShaderInterface::Dispatch(Params, [this](TArray<FVector3f> OutputVal) {
 			this->Completed.Broadcast(OutputVal);
 		});

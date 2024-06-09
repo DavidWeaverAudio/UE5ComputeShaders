@@ -27,8 +27,8 @@ public:
 		SHADER_PARAMETER(FVector3f, Input)
 		SHADER_PARAMETER(FVector3f, SurfaceNormal)
 		SHADER_PARAMETER(int, TotalOutputs)
-		SHADER_PARAMETER_RDG_BUFFER_UAV_ARRAY(RWBuffer<float3>, Output, [16])
-	END_SHADER_PARAMETER_STRUCT()
+        SHADER_PARAMETER_RDG_BUFFER_UAV(RWBuffer<float3>, Output)
+    END_SHADER_PARAMETER_STRUCT()
 
 public:
 	static bool ShouldCompilePermutation(const FGlobalShaderPermutationParameters& Parameters)
@@ -52,91 +52,89 @@ private:
 // This will tell the engine to create the shader and where the shader entry point is.
 //                            ShaderType                            ShaderPath                     Shader function name    Type
 IMPLEMENT_GLOBAL_SHADER(FVariableOutputComputeShader, "/MyShadersShaders/VariableOutputComputeShader.usf", "VariableOutputComputeShader", SF_Compute);
-
 void FVariableOutputComputeShaderInterface::DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FVariableOutputComputeShaderDispatchParams Params, TFunction<void(TArray<FVector3f> OutputVal)> AsyncCallback) {
-	FRDGBuilder GraphBuilder(RHICmdList);
-	{
-		SCOPE_CYCLE_COUNTER(STAT_VariableOutputComputeShader_Execute);
-		DECLARE_GPU_STAT(VariableOutputComputeShader)
-		RDG_EVENT_SCOPE(GraphBuilder, "VariableOutputComputeShader");
-		RDG_GPU_STAT_SCOPE(GraphBuilder, VariableOutputComputeShader);
+    FRDGBuilder GraphBuilder(RHICmdList);
+    {
+        SCOPE_CYCLE_COUNTER(STAT_VariableOutputComputeShader_Execute);
+        DECLARE_GPU_STAT(VariableOutputComputeShader)
+        RDG_EVENT_SCOPE(GraphBuilder, "VariableOutputComputeShader");
+        RDG_GPU_STAT_SCOPE(GraphBuilder, VariableOutputComputeShader);
 
-		typename FVariableOutputComputeShader::FPermutationDomain PermutationVector;
-		TShaderMapRef<FVariableOutputComputeShader> ComputeShader(GetGlobalShaderMap(GMaxRHIFeatureLevel), PermutationVector);
-		bool bIsShaderValid = ComputeShader.IsValid();
+        typename FVariableOutputComputeShader::FPermutationDomain PermutationVector;
+        TShaderMapRef<FVariableOutputComputeShader> ComputeShader(GetGlobalShaderMap(GMaxRHIFeatureLevel), PermutationVector);
+        bool bIsShaderValid = ComputeShader.IsValid();
 
-		if (bIsShaderValid) {
-			FVariableOutputComputeShader::FParameters* PassParameters = GraphBuilder.AllocParameters<FVariableOutputComputeShader::FParameters>();
+        if (bIsShaderValid) {
+            FVariableOutputComputeShader::FParameters* PassParameters = GraphBuilder.AllocParameters<FVariableOutputComputeShader::FParameters>();
 
-			PassParameters->Input = Params.Input;
-			PassParameters->SurfaceNormal = Params.SurfaceNormal;
-			PassParameters->TotalOutputs = Params.TotalOutputs;
+            PassParameters->Input = Params.Input;
+            PassParameters->SurfaceNormal = Params.SurfaceNormal;
+            PassParameters->TotalOutputs = Params.TotalOutputs;
 
-			TArray<FRDGBufferRef> OutputBuffers;
-			TArray<FRHIGPUBufferReadback*> GPUBufferReadbacks;
+            TArray<FRDGBufferRef> OutputBuffers;
+            TArray<FRHIGPUBufferReadback*> GPUBufferReadbacks;
 
-			OutputBuffers.Reserve(16);
-			GPUBufferReadbacks.Reserve(16);
+            OutputBuffers.Reserve(Params.TotalOutputs);
+            GPUBufferReadbacks.Reserve(Params.TotalOutputs);
 
-			for (int i = 0; i < 16; i++) {
-				const TCHAR* OutputName = *FString::Printf(TEXT("Output%d"), i);
-				FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(FRDGBufferDesc::CreateBufferDesc(sizeof(FVector3f), 1), OutputName);
-				OutputBuffers.Add(OutputBuffer);
-				PassParameters->Output[i] = GraphBuilder.CreateUAV(OutputBuffer);
+            for (int i = 0; i < Params.TotalOutputs; i++) {
+                const TCHAR* OutputName = *FString::Printf(TEXT("Output%d"), i);
+                FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(FRDGBufferDesc::CreateStructuredDesc(sizeof(FVector3f), Params.TotalOutputs), OutputName);
+                OutputBuffers.Add(OutputBuffer);
+				PassParameters->Output = GraphBuilder.CreateUAV(OutputBuffer);
 
-				FRHIGPUBufferReadback* GPUBufferReadback = new FRHIGPUBufferReadback(OutputName);
-				GPUBufferReadbacks.Add(GPUBufferReadback);
-				AddEnqueueCopyPass(GraphBuilder, GPUBufferReadback, OutputBuffer, 0);
-			}
+                FRHIGPUBufferReadback* GPUBufferReadback = new FRHIGPUBufferReadback(OutputName);
+                GPUBufferReadbacks.Add(GPUBufferReadback);
+                AddEnqueueCopyPass(GraphBuilder, GPUBufferReadback, OutputBuffer, 0);
+            }
 
-			FComputeShaderUtils::AddPass(
-				GraphBuilder,
-				RDG_EVENT_NAME("ExecuteVariableOutputComputeShader"),
-				ComputeShader,
-				PassParameters,
-				FComputeShaderUtils::GetGroupCount(FIntVector(Params.X, Params.Y, Params.Z), FComputeShaderUtils::kGolden2DGroupSize)
-			);
-			
-			auto RunnerFunc = [GPUBufferReadbacks, AsyncCallback](auto&& RunnerFunc) -> void {
-				bool bAllReady = true;
-				TArray<FVector3f> AllOutputs;
+            FComputeShaderUtils::AddPass(
+                GraphBuilder,
+                RDG_EVENT_NAME("ExecuteVariableOutputComputeShader"),
+                ComputeShader,
+                PassParameters,
+                FComputeShaderUtils::GetGroupCount(FIntVector(Params.X, Params.Y, Params.Z), FComputeShaderUtils::kGolden2DGroupSize)
+            );
 
-				for (FRHIGPUBufferReadback* GPUBufferReadback : GPUBufferReadbacks) {
-					if (GPUBufferReadback->IsReady()) {
-						FVector3f* Buffer = (FVector3f*)GPUBufferReadback->Lock(1);
-						AllOutputs.Add(*Buffer);
-						GPUBufferReadback->Unlock();
-					}
-					else {
-						bAllReady = false;
-						break;
-					}
-				}
+            auto RunnerFunc = [GPUBufferReadbacks, AsyncCallback](auto&& RunnerFunc) -> void {
+                bool bAllReady = true;
+                TArray<FVector3f> AllOutputs;
 
-				if (bAllReady) {
-					AsyncTask(ENamedThreads::GameThread, [AsyncCallback, AllOutputs]() {
-						AsyncCallback(AllOutputs);
-						});
-					for (FRHIGPUBufferReadback* GPUBufferReadback : GPUBufferReadbacks) {
-						delete GPUBufferReadback;
-					}
-				}
-				else {
-					AsyncTask(ENamedThreads::ActualRenderingThread, [RunnerFunc]() {
-						RunnerFunc(RunnerFunc);
-						});
-				}
-				};
+                for (FRHIGPUBufferReadback* GPUBufferReadback : GPUBufferReadbacks) {
+                    if (GPUBufferReadback->IsReady()) {
+                        FVector3f* Buffer = (FVector3f*)GPUBufferReadback->Lock(1);
+                        AllOutputs.Add(*Buffer);
+                        GPUBufferReadback->Unlock();
+                    }
+                    else {
+                        bAllReady = false;
+                        break;
+                    }
+                }
 
-			AsyncTask(ENamedThreads::ActualRenderingThread, [RunnerFunc]() {
-				RunnerFunc(RunnerFunc);
-				});
-		}
-		else {
-			// We silently exit here as we don't want to crash the game if the shader is not found or has an error.
+                if (bAllReady) {
+                    AsyncTask(ENamedThreads::GameThread, [AsyncCallback, AllOutputs]() {
+                        AsyncCallback(AllOutputs);
+                        });
+                    for (FRHIGPUBufferReadback* GPUBufferReadback : GPUBufferReadbacks) {
+                        delete GPUBufferReadback;
+                    }
+                }
+                else {
+                    AsyncTask(ENamedThreads::ActualRenderingThread, [RunnerFunc]() {
+                        RunnerFunc(RunnerFunc);
+                        });
+                }
+                };
 
-		}
-	}
+            AsyncTask(ENamedThreads::ActualRenderingThread, [RunnerFunc]() {
+                RunnerFunc(RunnerFunc);
+                });
+        }
+        else {
+            // We silently exit here as we don't want to crash the game if the shader is not found or has an error.
+        }
+    }
 
-	GraphBuilder.Execute();
+    GraphBuilder.Execute();
 }
