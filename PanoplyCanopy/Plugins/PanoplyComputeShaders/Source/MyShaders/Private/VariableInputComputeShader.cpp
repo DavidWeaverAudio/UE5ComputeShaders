@@ -27,6 +27,7 @@ public:
 		SHADER_PARAMETER_RDG_BUFFER_SRV(Buffer<float3>, Input)
 		SHADER_PARAMETER_RDG_BUFFER_UAV(RWBuffer<float>, Output)
 		SHADER_PARAMETER(int, TotalInputs)
+		SHADER_PARAMETER(FVector3f, InputTarget)
 	END_SHADER_PARAMETER_STRUCT()
 
 public:
@@ -71,9 +72,10 @@ void FVariableInputComputeShaderInterface::DispatchRenderThread(FRHICommandListI
 
 			int NumInputs = Params.TotalInputs;
 			int InputSize = sizeof(FVector3f);
-			FRDGBufferRef InputBuffer = GraphBuilder.CreateBuffer(FRDGBufferDesc::CreateStructuredDesc(InputSize, NumInputs),TEXT("InputBuffer"));
+			FRDGBufferRef InputBuffer = CreateUploadBuffer(GraphBuilder, TEXT("InputBuffer"), InputSize, NumInputs, RawData, InputSize * NumInputs);
 			PassParameters->Input = GraphBuilder.CreateSRV(FRDGBufferSRVDesc(InputBuffer, PF_R32G32B32F));
 
+			PassParameters->InputTarget = Params.InputTarget;
 			FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(FRDGBufferDesc::CreateBufferDesc(sizeof(int32), 1),TEXT("OutputBuffer"));
 			PassParameters->Output = GraphBuilder.CreateUAV(FRDGBufferUAVDesc(OutputBuffer, PF_R32_SINT));
 			PassParameters->TotalInputs = NumInputs;
