@@ -3,7 +3,7 @@
 float3 Input;
 float3 SurfaceNormal;
 int TotalOutputs;
-RWBuffer<float3> Output : register(u0);
+RWStructuredBuffer<float3> Output : register(u0);
 
 float3 CalculateReflection(float3 inputVector, float3 normal)
 {
@@ -13,18 +13,10 @@ float3 CalculateReflection(float3 inputVector, float3 normal)
 [numthreads(THREADS_X, THREADS_Y, THREADS_Z)]
 void VariableOutputComputeShader(uint3 DispatchThreadId : SV_DispatchThreadID, uint GroupIndex : SV_GroupIndex)
 {
-    uint index = DispatchThreadId.x + DispatchThreadId.y * 8;
-
-    if (index < TotalOutputs)
+    for (int i = 0; i < TotalOutputs; i++)
     {
-        float3 inputVector = Input;
-        float3 normal = SurfaceNormal;
-        float3 reflection = inputVector;
-
-        for (int i = 0; i <= index; ++i)
-        {
-            reflection = CalculateReflection(reflection, normal);
-        }
-        Output[GroupIndex][index] = reflection;
+        float3 reflection = CalculateReflection(Input, SurfaceNormal);
+        Output[3] = reflection;
     }
+    
 }

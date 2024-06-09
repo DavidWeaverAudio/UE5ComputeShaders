@@ -71,54 +71,34 @@ void FVariableOutputComputeShaderInterface::DispatchRenderThread(FRHICommandList
             PassParameters->SurfaceNormal = Params.SurfaceNormal;
             PassParameters->TotalOutputs = Params.TotalOutputs;
 
-            TArray<FRDGBufferRef> OutputBuffers;
-            TArray<FRHIGPUBufferReadback*> GPUBufferReadbacks;
+			FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(FRDGBufferDesc::CreateStructuredDesc(sizeof(FVector3f), Params.TotalOutputs), TEXT("OutputBuffer"));
+			PassParameters->Output = GraphBuilder.CreateUAV(OutputBuffer);
 
-            OutputBuffers.Reserve(Params.TotalOutputs);
-            GPUBufferReadbacks.Reserve(Params.TotalOutputs);
-
-            for (int i = 0; i < Params.TotalOutputs; i++) {
-                const TCHAR* OutputName = *FString::Printf(TEXT("Output%d"), i);
-                FRDGBufferRef OutputBuffer = GraphBuilder.CreateBuffer(FRDGBufferDesc::CreateStructuredDesc(sizeof(FVector3f), Params.TotalOutputs), OutputName);
-                OutputBuffers.Add(OutputBuffer);
-				PassParameters->Output = GraphBuilder.CreateUAV(OutputBuffer);
-
-                FRHIGPUBufferReadback* GPUBufferReadback = new FRHIGPUBufferReadback(OutputName);
-                GPUBufferReadbacks.Add(GPUBufferReadback);
-                AddEnqueueCopyPass(GraphBuilder, GPUBufferReadback, OutputBuffer, 0);
-            }
-
-            FComputeShaderUtils::AddPass(
-                GraphBuilder,
+            auto GroupCount = FComputeShaderUtils::GetGroupCount(FIntVector(Params.X, Params.Y, Params.Z), FComputeShaderUtils::kGolden2DGroupSize);
+            GraphBuilder.AddPass(
                 RDG_EVENT_NAME("ExecuteVariableOutputComputeShader"),
-                ComputeShader,
                 PassParameters,
-                FComputeShaderUtils::GetGroupCount(FIntVector(Params.X, Params.Y, Params.Z), FComputeShaderUtils::kGolden2DGroupSize)
-            );
+                ERDGPassFlags::AsyncCompute,
+                [&PassParameters, ComputeShader, GroupCount](FRHIComputeCommandList& RHICmdList)
+                {
+                    FComputeShaderUtils::Dispatch(RHICmdList, ComputeShader, *PassParameters, GroupCount);
+                });
 
-            auto RunnerFunc = [GPUBufferReadbacks, AsyncCallback](auto&& RunnerFunc) -> void {
-                bool bAllReady = true;
+            FRHIGPUBufferReadback* GPUBufferReadback = new FRHIGPUBufferReadback(TEXT("ExecuteVariableOutputComputeShaderOutput"));
+            AddEnqueueCopyPass(GraphBuilder, GPUBufferReadback, OutputBuffer, 0u);
+
+            auto RunnerFunc = [GPUBufferReadback, Params, AsyncCallback](auto&& RunnerFunc) -> void {
                 TArray<FVector3f> AllOutputs;
+                AllOutputs.SetNum(Params.TotalOutputs);
 
-                for (FRHIGPUBufferReadback* GPUBufferReadback : GPUBufferReadbacks) {
-                    if (GPUBufferReadback->IsReady()) {
-                        FVector3f* Buffer = (FVector3f*)GPUBufferReadback->Lock(1);
-                        AllOutputs.Add(*Buffer);
-                        GPUBufferReadback->Unlock();
-                    }
-                    else {
-                        bAllReady = false;
-                        break;
-                    }
-                }
-
-                if (bAllReady) {
+                if (GPUBufferReadback->IsReady()) {
+                    FVector3f* Buffer = (FVector3f*)GPUBufferReadback->Lock(1);
+                    FMemory::Memcpy(AllOutputs.GetData(), Buffer, Params.TotalOutputs * sizeof(FVector3f));
+                    GPUBufferReadback->Unlock();
                     AsyncTask(ENamedThreads::GameThread, [AsyncCallback, AllOutputs]() {
                         AsyncCallback(AllOutputs);
                         });
-                    for (FRHIGPUBufferReadback* GPUBufferReadback : GPUBufferReadbacks) {
-                        delete GPUBufferReadback;
-                    }
+                    delete GPUBufferReadback;
                 }
                 else {
                     AsyncTask(ENamedThreads::ActualRenderingThread, [RunnerFunc]() {
