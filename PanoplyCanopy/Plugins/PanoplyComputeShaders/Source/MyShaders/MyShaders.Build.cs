@@ -8,7 +8,6 @@ public class MyShaders : ModuleRules
 
         PrivateIncludePaths.AddRange(new string[]
         {
-            "Runtime/Renderer/Private",
             "MyShaders/Private"
         });
         if (Target.bBuildEditor == true)
