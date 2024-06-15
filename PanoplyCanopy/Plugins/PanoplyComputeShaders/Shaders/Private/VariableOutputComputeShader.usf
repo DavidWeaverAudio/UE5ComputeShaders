@@ -15,8 +15,8 @@ void VariableOutputComputeShader(uint3 DispatchThreadId : SV_DispatchThreadID, u
 {
     for (int i = 0; i < TotalOutputs; i++)
     {
-        float3 reflection = CalculateReflection(Input, SurfaceNormal);
-        Output[3] = reflection;
+        float3 reflection = CalculateReflection(Input, SurfaceNormal) * i;
+        Output[i] = reflection;
     }
     
 }

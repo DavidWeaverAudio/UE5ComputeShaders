@@ -56,6 +56,7 @@ void FVariableOutputComputeShaderInterface::DispatchRenderThread(FRHICommandList
     FRDGBuilder GraphBuilder(RHICmdList);
     {
         SCOPE_CYCLE_COUNTER(STAT_VariableOutputComputeShader_Execute);
+		TRACE_CPUPROFILER_EVENT_SCOPE(PROFILE_VariableOutputComputeShader);
         DECLARE_GPU_STAT(VariableOutputComputeShader)
         RDG_EVENT_SCOPE(GraphBuilder, "VariableOutputComputeShader");
         RDG_GPU_STAT_SCOPE(GraphBuilder, VariableOutputComputeShader);
