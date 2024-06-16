@@ -1,0 +1,11 @@
+#include "/Engine/Public/Platform.ush"
+
+Buffer<float3> Input;
+float SurfaceThreshold;
+RWBuffer<int> Output;
+
+[numthreads(THREADS_X, THREADS_Y, THREADS_Z)]
+void GeometryAwareComputeShader(uint3 DispatchThreadId : SV_DispatchThreadID, uint GroupIndex : SV_GroupIndex)
+{
+    Output[0] = SurfaceThreshold > 1.0f;
+}
