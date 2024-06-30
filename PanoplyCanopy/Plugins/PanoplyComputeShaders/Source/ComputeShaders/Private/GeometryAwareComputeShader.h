@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyShaders/Public/MyShadersModule.h"
+#include "ComputeShaders/Public/ComputeShadersModule.h"
 #include "MeshPassProcessor.h"
 #include "RHICommandList.h"
 #include "RenderGraphBuilder.h"
@@ -23,6 +23,6 @@
 #include "RenderGraphResources.h"
 #include "Runtime/Engine/Classes/Engine/TextureRenderTarget2D.h"
 
-#define NUM_THREADS_VariableOutputComputeShader_X 8
-#define NUM_THREADS_VariableOutputComputeShader_Y 8
-#define NUM_THREADS_VariableOutputComputeShader_Z 1
+#define NUM_THREADS_GeometryAwareComputeShader_X 1
+#define NUM_THREADS_GeometryAwareComputeShader_Y 1
+#define NUM_THREADS_GeometryAwareComputeShader_Z 1

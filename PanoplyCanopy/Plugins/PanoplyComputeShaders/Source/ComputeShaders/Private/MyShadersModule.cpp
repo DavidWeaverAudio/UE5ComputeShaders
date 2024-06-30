@@ -1,4 +1,4 @@
-#include "MyShadersModule.h"
+#include "ComputeShadersModule.h"
 
 #include "Misc/Paths.h"
 #include "Misc/FileHelper.h"
@@ -10,17 +10,17 @@
 #include "Runtime/Core/Public/Modules/ModuleManager.h"
 #include "Interfaces/IPluginManager.h"
 
-void FMyShadersModule::StartupModule()
+void FComputeShadersModule::StartupModule()
 {
 	// Maps virtual shader source directory to the plugin's actual shaders directory.
 	FString PluginShaderDir = FPaths::Combine(IPluginManager::Get().FindPlugin(TEXT("PanoplyComputeShaders"))->GetBaseDir(), TEXT("Shaders/Private"));
-	AddShaderSourceDirectoryMapping(TEXT("/MyShadersShaders"), PluginShaderDir);
+	AddShaderSourceDirectoryMapping(TEXT("/ComputeShaders"), PluginShaderDir);
 }
 
-void FMyShadersModule::ShutdownModule()
+void FComputeShadersModule::ShutdownModule()
 {
 }
 
 #undef LOCTEXT_NAMESPACE
 
-IMPLEMENT_MODULE(FMyShadersModule, MyShaders)
+IMPLEMENT_MODULE(FComputeShadersModule, ComputeShaders)

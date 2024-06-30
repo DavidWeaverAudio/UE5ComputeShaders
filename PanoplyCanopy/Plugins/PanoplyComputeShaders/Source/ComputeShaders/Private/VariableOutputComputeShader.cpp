@@ -1,5 +1,5 @@
 #include "VariableOutputComputeShader.h"
-#include "MyShaders/Public/VariableOutputComputeShader.h"
+#include "ComputeShaders/Public/VariableOutputComputeShader.h"
 #include "PixelShaderUtils.h"
 #include "MeshPassProcessor.inl"
 #include "StaticMeshResources.h"
@@ -14,7 +14,7 @@ DECLARE_STATS_GROUP(TEXT("VariableOutputComputeShader"), STATGROUP_VariableOutpu
 DECLARE_CYCLE_STAT(TEXT("VariableOutputComputeShader Execute"), STAT_VariableOutputComputeShader_Execute, STATGROUP_VariableOutputComputeShader);
 
 // This class carries our parameter declarations and acts as the bridge between cpp and HLSL.
-class MYSHADERS_API FVariableOutputComputeShader : public FGlobalShader
+class COMPUTESHADERS_API FVariableOutputComputeShader : public FGlobalShader
 {
 public:
 
@@ -51,7 +51,7 @@ private:
 
 // This will tell the engine to create the shader and where the shader entry point is.
 //                            ShaderType                            ShaderPath                     Shader function name    Type
-IMPLEMENT_GLOBAL_SHADER(FVariableOutputComputeShader, "/MyShadersShaders/VariableOutputComputeShader.usf", "VariableOutputComputeShader", SF_Compute);
+IMPLEMENT_GLOBAL_SHADER(FVariableOutputComputeShader, "/ComputeShaders/VariableOutputComputeShader.usf", "VariableOutputComputeShader", SF_Compute);
 void FVariableOutputComputeShaderInterface::DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FVariableOutputComputeShaderDispatchParams Params, TFunction<void(TArray<FVector3f> OutputVal)> AsyncCallback) {
     FRDGBuilder GraphBuilder(RHICmdList);
     {

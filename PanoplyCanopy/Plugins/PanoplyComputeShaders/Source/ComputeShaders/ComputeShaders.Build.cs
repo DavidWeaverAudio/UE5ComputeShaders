@@ -1,14 +1,14 @@
 using UnrealBuildTool;
 
-public class MyShaders : ModuleRules
+public class ComputeShaders : ModuleRules
 {
-    public MyShaders(ReadOnlyTargetRules Target) : base(Target)
+    public ComputeShaders(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PrivateIncludePaths.AddRange(new string[]
         {
-            "MyShaders/Private"
+            "ComputeShaders/Private"
         });
         if (Target.bBuildEditor == true)
         {

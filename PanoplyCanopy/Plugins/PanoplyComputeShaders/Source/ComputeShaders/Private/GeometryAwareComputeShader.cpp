@@ -1,5 +1,5 @@
 #include "GeometryAwareComputeShader.h"
-#include "MyShaders/Public/GeometryAwareComputeShader.h"
+#include "ComputeShaders/Public/GeometryAwareComputeShader.h"
 #include "PixelShaderUtils.h"
 #include "MeshPassProcessor.inl"
 #include "StaticMeshResources.h"
@@ -14,7 +14,7 @@ DECLARE_STATS_GROUP(TEXT("GeometryAwareComputeShader"), STATGROUP_GeometryAwareC
 DECLARE_CYCLE_STAT(TEXT("GeometryAwareComputeShader Execute"), STAT_GeometryAwareComputeShader_Execute, STATGROUP_GeometryAwareComputeShader);
 
 // This class carries our parameter declarations and acts as the bridge between cpp and HLSL.
-class MYSHADERS_API FGeometryAwareComputeShader : public FGlobalShader
+class COMPUTESHADERS_API FGeometryAwareComputeShader : public FGlobalShader
 {
 public:
 
@@ -50,7 +50,7 @@ private:
 
 // This will tell the engine to create the shader and where the shader entry point is.
 //                            ShaderType                            ShaderPath                     Shader function name    Type
-IMPLEMENT_GLOBAL_SHADER(FGeometryAwareComputeShader, "/MyShadersShaders/GeometryAwareComputeShader.usf", "GeometryAwareComputeShader", SF_Compute);
+IMPLEMENT_GLOBAL_SHADER(FGeometryAwareComputeShader, "/ComputeShaders/GeometryAwareComputeShader.usf", "GeometryAwareComputeShader", SF_Compute);
 
 void FGeometryAwareComputeShaderInterface::DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FGeometryAwareComputeShaderDispatchParams Params, TFunction<void(int32 NearGeometry)> AsyncCallback) {
 	FRDGBuilder GraphBuilder(RHICmdList);

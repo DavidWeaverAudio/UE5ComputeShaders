@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyShaders/Public/MyShadersModule.h"
+#include "ComputeShaders/Public/ComputeShadersModule.h"
 #include "MeshPassProcessor.h"
 #include "RHICommandList.h"
 #include "RenderGraphBuilder.h"

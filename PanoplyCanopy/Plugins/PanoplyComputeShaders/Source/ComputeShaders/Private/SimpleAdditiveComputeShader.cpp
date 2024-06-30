@@ -1,5 +1,5 @@
 #include "SimpleAdditiveComputeShader.h"
-#include "MyShaders/Public/SimpleAdditiveComputeShader.h"
+#include "ComputeShaders/Public/SimpleAdditiveComputeShader.h"
 #include "PixelShaderUtils.h"
 #include "MeshPassProcessor.inl"
 #include "StaticMeshResources.h"
@@ -15,7 +15,7 @@ DECLARE_STATS_GROUP(TEXT("SimpleAdditiveComputeShader"), STATGROUP_SimpleAdditiv
 DECLARE_CYCLE_STAT(TEXT("SimpleAdditiveComputeShader Execute"), STAT_SimpleAdditiveComputeShader_Execute, STATGROUP_SimpleAdditiveComputeShader);
 
 // This class carries our parameter declarations and acts as the bridge between cpp and HLSL.
-class MYSHADERS_API FSimpleAdditiveComputeShader : public FGlobalShader
+class COMPUTESHADERS_API FSimpleAdditiveComputeShader : public FGlobalShader
 {
 public:
 
@@ -69,7 +69,7 @@ private:
 
 // This will tell the engine to create the shader and where the shader entry point is.
 //                            ShaderType                            ShaderPath                     Shader function name    Type
-IMPLEMENT_GLOBAL_SHADER(FSimpleAdditiveComputeShader, "/MyShadersShaders/SimpleAdditiveComputeShader.usf", "SimpleAdditiveComputeShader", SF_Compute);
+IMPLEMENT_GLOBAL_SHADER(FSimpleAdditiveComputeShader, "/ComputeShaders/SimpleAdditiveComputeShader.usf", "SimpleAdditiveComputeShader", SF_Compute);
 
 void FSimpleAdditiveComputeShaderInterface::DispatchRenderThread(FRHICommandListImmediate& RHICmdList, FSimpleAdditiveComputeShaderDispatchParams Params, TFunction<void(int OutputVal)> AsyncCallback) {
 	FRDGBuilder GraphBuilder(RHICmdList);

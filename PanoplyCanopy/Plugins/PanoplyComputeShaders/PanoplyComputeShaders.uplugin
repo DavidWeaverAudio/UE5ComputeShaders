@@ -21,7 +21,7 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "MyShaders",
+			"Name": "ComputeShaders",
 			"Type": "Runtime",
 			"LoadingPhase": "PostConfigInit"
 		}

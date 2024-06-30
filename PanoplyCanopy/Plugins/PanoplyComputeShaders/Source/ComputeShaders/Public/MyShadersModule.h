@@ -8,7 +8,7 @@
 #include "RenderGraphResources.h"
 #include "Runtime/Engine/Classes/Engine/TextureRenderTarget2D.h"
 
-class FMyShadersModule : public IModuleInterface
+class FComputeShadersModule : public IModuleInterface
 {
 public:
 
